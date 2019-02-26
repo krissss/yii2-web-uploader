@@ -61,3 +61,30 @@ class FileController extends Controller
     }
 }
 ```
+
+examples
+--------
+
+### only accept images
+
+```php
+<?php
+// for client validate
+// QuickWebUploader
+[
+    'pluginOptions' => [
+        'accept' => [
+            'extensions' => 'png,jpeg,jpg,gif',
+            'mimeTypes' => 'image/*',
+        ],
+    ],
+];
+
+// for server validate
+// QuickUploadAction
+[
+    'validationRules' => [
+        ['file', 'file', 'extensions' => ['png', 'jpeg', 'jpg', 'gif'], 'mimeTypes' => 'image/*', 'maxSize' => 5*1024*1024]
+    ],
+];
+```

@@ -16,6 +16,7 @@ class QuickUploadAction extends QuickBaseAction
     public $fileParam = 'file';
     /**
      * 上传文件的验证规则
+     * @link https://www.yiiframework.com/doc/guide/2.0/en/input-validation#ad-hoc-validation
      * @var array
      */
     public $validationRules = [];

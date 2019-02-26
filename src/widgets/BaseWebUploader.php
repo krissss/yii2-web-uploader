@@ -69,7 +69,7 @@ class BaseWebUploader extends InputWidget
         $options = [];
         if ($this->pluginOptions) {
             if (is_array($this->pluginOptions)) {
-                $options = Json::htmlEncode($this->pluginOptions);
+                $options = $this->pluginOptions;
             } elseif (is_callable($this->pluginOptions)) {
                 $options = call_user_func($this->pluginOptions, $this);
             }
@@ -82,7 +82,7 @@ class BaseWebUploader extends InputWidget
         $events = [];
         if ($this->pluginEvents) {
             if (is_array($this->pluginEvents)) {
-                $events = Json::htmlEncode($this->pluginEvents);
+                $events = $this->pluginEvents;
             } elseif (is_callable($this->pluginEvents)) {
                 $events = call_user_func($this->pluginEvents, $this);
             }
