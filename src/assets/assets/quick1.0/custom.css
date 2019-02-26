@@ -1,0 +1,42 @@
+.file-list-item {
+  display: inline-block;
+  border: 1px dashed #aaa;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  vertical-align: middle;
+  text-align: center;
+  position: relative;
+}
+
+.file-list-item.pick {
+  font-size: 60px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.file-list-item.text {
+  padding: 0 5px;
+}
+
+.file-list-item .progress,
+.file-list-item.complete.delete:after
+{
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .3);
+}
+.file-list-item.complete.delete:after {
+  content: 'X';
+  color: #eee;
+  font-size: 40px;
+}
+
+.file-list-item img {
+  height: 100%;
+  vertical-align: baseline;
+}
