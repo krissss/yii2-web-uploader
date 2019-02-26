@@ -9,12 +9,25 @@ class QuickUploadAction extends QuickBaseAction
 {
     const MSG_UPLOAD_SAVE_ERROR = 'MSG_UPLOAD_SAVE_ERROR';
 
+    /**
+     * 上传文件的 file 参数名
+     * @var string
+     */
     public $fileParam = 'file';
-
+    /**
+     * 上传文件的验证规则
+     * @var array
+     */
     public $validationRules = [];
-
+    /**
+     * 文件名生成的方式，默认用 md5
+     * @var callable
+     */
     public $fileSaveNameCallback;
-
+    /**
+     * 文件保存的方法，默认用 UploadedFile::saveAs()
+     * @var callable
+     */
     public $saveFileCallback;
 
     public function run()

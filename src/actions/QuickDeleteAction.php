@@ -8,6 +8,10 @@ class QuickDeleteAction extends QuickBaseAction
 {
     const MSG_DELETE_ERROR = 'MSG_DELETE_ERROR';
 
+    /**
+     * 删除文件的方式，默认使用 unlink 删除本地文件
+     * @var callable
+     */
     public $deleteFileCallback;
 
     public function run() {

@@ -8,10 +8,20 @@ use yii\web\Response;
 
 abstract class QuickBaseAction extends Action
 {
+    /**
+     * 文件保存路径
+     * @var string
+     */
     public $savePath = '@webroot/uploads';
-
+    /**
+     * 文件显示的路径
+     * @var string
+     */
     public $displayPath = '@web/uploads';
-
+    /**
+     * 自定义消息的内容
+     * @var array
+     */
     public $messageMap = [];
 
     public function init()
