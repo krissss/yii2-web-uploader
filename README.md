@@ -2,30 +2,62 @@ Yii2 WebUploader
 ================
 webuploader for Yii2 http://fex.baidu.com/webuploader/
 
+ScreenShot
+------------
+![Effect picture 1](preview/preview1.gif "Effect picture 1")  
+
 Installation
 ------------
 
-The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
-
-Either run
-
 ```
-php composer.phar require --prefer-dist kriss/yii2-webuploader "*"
+composer require kriss/yii2-webuploader
 ```
-
-or add
-
-```
-"kriss/yii2-webuploader": "*"
-```
-
-to the require section of your `composer.json` file.
-
 
 Usage
 -----
 
-Once the extension is installed, simply use it in your code by  :
+### widgets
 
 ```php
-<?= \kriss\webUploader\AutoloadExample::widget(); ?>```
+<?php
+use \kriss\webUploader\widgets\QuickWebUploader;
+
+echo QuickWebUploader::widget([
+    'fileNumLimit' => 5,
+]);
+// or
+echo $form->field($model, 'file')->widget(QuickWebUploader::class, [
+    'uploadUrl' => ['/file/upload'],
+]);
+?>
+```
+
+### actions
+```php
+<?php
+
+namespace admin\controllers;
+
+use yii\web\Controller;
+use kriss\webUploader\actions\QuickDeleteAction;
+use kriss\webUploader\actions\QuickUploadAction;
+
+class FileController extends Controller
+{
+    public function actions()
+    {
+        return [
+            'upload' => [
+                'class' => QuickUploadAction::class,
+                'savePath' => '@webroot/uploads',
+                'displayPath' => '@web/uploads',
+            ],
+            'delete' => [
+                'class' => QuickDeleteAction::class,
+                'savePath' => '@webroot/uploads',
+                'displayPath' => '@web/uploads',
+            ],
+        ];
+    }
+}
+```
