@@ -4,6 +4,7 @@ namespace kriss\webUploader\actions;
 
 use Yii;
 use yii\base\Action;
+use yii\helpers\FileHelper;
 use yii\web\Response;
 
 abstract class QuickBaseAction extends Action
@@ -23,34 +24,53 @@ abstract class QuickBaseAction extends Action
      * @var array
      */
     public $messageMap = [];
+    /**
+     * @var bool
+     */
+    public $normalizePath = 'auto';
 
     public function init()
     {
         parent::init();
         Yii::$app->response->format = Response::FORMAT_JSON;
         Yii::$app->request->enableCsrfValidation = false;
+        if ($this->normalizePath === 'auto') {
+            $this->normalizePath = strpos($this->savePath, '..') !== false;
+        }
     }
 
     protected function getSaveFilename($filename)
     {
-        return Yii::getAlias(rtrim($this->savePath, '/') . '/' . $filename);
+        return $this->getFullFilename($filename, $this->savePath);
     }
 
     protected function getDisplayFilename($filename)
     {
-        return Yii::getAlias(rtrim($this->displayPath, '/') . '/' . $filename);
+        return $this->getFullFilename($filename, $this->displayPath);
     }
 
     protected function getFullFilename($filename, $path)
     {
-        return Yii::getAlias(rtrim($path, '/') . '/' . $filename);
+        $filename = Yii::getAlias(rtrim($path, '/') . '/' . $filename);
+        if ($this->normalizePath) {
+            return FileHelper::normalizePath($filename);
+        }
+        return $filename;
     }
 
     protected function solveDisplay2SaveFilename($displayFilename)
     {
         $displayPath = Yii::getAlias(rtrim($this->displayPath, '/'));
+        if ($this->normalizePath) {
+            $displayPath = FileHelper::normalizePath($displayPath);
+            $displayFilename = FileHelper::normalizePath($displayFilename);
+        }
         $filename = str_replace($displayPath, '', $displayFilename);
-        return Yii::getAlias(rtrim($this->savePath) . '/' . ltrim($filename, '/'));
+        $filename = Yii::getAlias(rtrim($this->savePath) . '/' . ltrim($filename, '/'));
+        if ($this->normalizePath) {
+            return FileHelper::normalizePath($filename);
+        }
+        return $filename;
     }
 
     public function returnError($msg, $code = 422)
