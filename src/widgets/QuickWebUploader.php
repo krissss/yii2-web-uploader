@@ -218,9 +218,6 @@ HTML;
 
     protected function renderInput()
     {
-        if (count($this->existFiles) <= 0) {
-            return '';
-        }
         $html = [];
         $name = $this->hiddenInputName;
         $html[] = Html::beginTag('div', ['id' => $this->hiddenInputContainerId]);
