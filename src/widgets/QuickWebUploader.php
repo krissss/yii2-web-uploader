@@ -102,8 +102,12 @@ class QuickWebUploader extends BaseWebUploader
             $this->existFiles = $this->value;
             $this->hiddenInputName = $this->name;
         }
-        if (is_string($this->existFiles)) {
-            $this->existFiles = array_filter(explode($this->fileExplodeBy, $this->existFiles));
+        if (!$this->existFiles) {
+            $this->existFiles = [];
+        } else {
+            if (is_string($this->existFiles)) {
+                $this->existFiles = array_filter(explode($this->fileExplodeBy, $this->existFiles));
+            }
         }
     }
 
@@ -214,7 +218,6 @@ HTML;
         }
         return implode("\n", $listItems);
     }
-
 
     protected function renderInput()
     {
