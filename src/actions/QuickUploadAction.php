@@ -37,6 +37,11 @@ class QuickUploadAction extends QuickBaseAction
      * @var bool
      */
     public $createDirection = true;
+    /**
+     * 可以解决上传的文件名中带中文的问题
+     * @var bool
+     */
+    public $filenameCoverUtf82GBK = true;
 
     public function run()
     {
@@ -76,6 +81,9 @@ class QuickUploadAction extends QuickBaseAction
         if ($this->createDirection) {
             FileHelper::createDirectory(dirname($filename));
         }
+        if ($this->filenameCoverUtf82GBK) {
+            $filename = iconv("UTF-8", "GBK", $filename);
+        }
         return $uploadedFile->saveAs($filename);
     }
 
@@ -103,10 +111,7 @@ class QuickUploadAction extends QuickBaseAction
             if ($this->fileSaveNameCallback && is_callable($this->fileSaveNameCallback)) {
                 $this->filename = call_user_func($this->fileSaveNameCallback, $uploadedFile, $this);
             } else {
-                $this->filename = md5(microtime() + random_int(10000, 99999));
-            }
-            if (strpos('.', $this->filename) === false) {
-                $this->filename .= '.' . $uploadedFile->getExtension();
+                $this->filename = md5(microtime() + random_int(10000, 99999)) . $uploadedFile->getExtension();
             }
         }
         $filename = $this->getFullFilename($this->filename, $basePath);
