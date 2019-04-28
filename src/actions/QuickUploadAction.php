@@ -111,8 +111,11 @@ class QuickUploadAction extends QuickBaseAction
             if ($this->fileSaveNameCallback && is_callable($this->fileSaveNameCallback)) {
                 $this->filename = call_user_func($this->fileSaveNameCallback, $uploadedFile, $this);
             } else {
-                $this->filename = md5(microtime() + random_int(10000, 99999)) . $uploadedFile->getExtension();
+                $this->filename = md5(microtime() . random_int(10000, 99999));
             }
+        }
+        if (strpos($this->filename, '.') === false) {
+            $this->filename .= '.' . $uploadedFile->getExtension();
         }
         $filename = $this->getFullFilename($this->filename, $basePath);
         return $filename;
