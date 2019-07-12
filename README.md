@@ -10,7 +10,7 @@ Installation
 ------------
 
 ```
-composer require kriss/yii2-webuploader
+composer require kriss/yii2-web-uploader
 ```
 
 Usage
