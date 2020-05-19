@@ -14,7 +14,7 @@
   cursor: pointer;
 }
 
-.file-list-item.text {
+.file-list-item .text {
   padding: 0 5px;
 }
 

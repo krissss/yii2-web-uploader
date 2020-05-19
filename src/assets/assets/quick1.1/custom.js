@@ -10,6 +10,7 @@
       deleteUrl: '/file/delete',
       realDelete: true,
       messageMap: {},
+      maxTextLength: 62,
       alertMsg: function (msg, type) {
         alert(msg);
       }
@@ -28,28 +29,28 @@
         });
         // 删除文件
         $container.find('.file-list')
-          .on('mouseover', '.file-list-item.complete', function () {
-            $(this).addClass('delete');
-          })
-          .on('mouseout', '.file-list-item.complete', function () {
-            $(this).removeClass('delete');
-          })
-          .on('click', '.file-list-item.complete.delete', function () {
-            $(this).remove();
-            if ($(this).attr('data-origin')) {
-              // 此处无法动态修改 fileNumLimit 的值，通过事件 beforeFileQueued 解决
-              // @link https://github.com/fex-team/webuploader/issues/2927
-              // var fileNumLimit = uploader.option('fileNumLimit');
-              // uploader.option('fileNumLimit', fileNumLimit + 1);
-            } else {
-              uploader.removeFile($(this).attr('data-file-id'));
-            }
-            if (def.realDelete) {
-              $.post(def.deleteUrl, {filename: $(this).attr('data-url')});
-            }
-            methods.checkPickStatus();
-            methods.solveHiddenInput();
-          });
+            .on('mouseover', '.file-list-item.complete', function () {
+              $(this).addClass('delete');
+            })
+            .on('mouseout', '.file-list-item.complete', function () {
+              $(this).removeClass('delete');
+            })
+            .on('click', '.file-list-item.complete.delete', function () {
+              $(this).remove();
+              if ($(this).attr('data-origin')) {
+                // 此处无法动态修改 fileNumLimit 的值，通过事件 beforeFileQueued 解决
+                // @link https://github.com/fex-team/webuploader/issues/2927
+                // var fileNumLimit = uploader.option('fileNumLimit');
+                // uploader.option('fileNumLimit', fileNumLimit + 1);
+              } else {
+                uploader.removeFile($(this).attr('data-file-id'));
+              }
+              if (def.realDelete) {
+                $.post(def.deleteUrl, {filename: $(this).attr('data-url')});
+              }
+              methods.checkPickStatus();
+              methods.solveHiddenInput();
+            });
       },
       webUploaderInit: function () {
         var options = {
@@ -117,6 +118,14 @@
         methods.alertMsg(msg, 'error');
         uploader.removeFile(file.id, true);
         methods.getListItemContainer(file).remove();
+      },
+      // 截断文本，避免过长换行的问题
+      cutTextMaxLength(text) {
+        if (def.maxTextLength > 0 && text.length > def.maxTextLength) {
+          var startPos = parseInt((def.maxTextLength / 2 - 3) + '')
+          return text.substr(0, startPos) + '......' + text.substr(-startPos)
+        }
+        return text;
       }
     };
 
@@ -124,8 +133,8 @@
       fileQueued: function (file) {
         var template = $container.find('.file-list-item.template').clone();
         template.removeClass('template')
-          .attr('data-file-id', file.id)
-          .show();
+            .attr('data-file-id', file.id)
+            .show();
         $container.find('.file-list-item.pick').before(template);
         uploader.makeThumb(file, function (error, src) {
           if (error) {
@@ -155,7 +164,7 @@
           item.find('img').attr('src', url);
         } else {
           item.find('img').remove();
-          item.append('<span class="text">' + url + '</span>');
+          item.append('<span class="text">' + methods.cutTextMaxLength(url) + '</span>');
         }
       },
       uploadError: function (file) {

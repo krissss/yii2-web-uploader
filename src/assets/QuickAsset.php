@@ -6,7 +6,7 @@ use yii\web\AssetBundle;
 
 class QuickAsset extends AssetBundle
 {
-    public $sourcePath = __DIR__ . '/assets/quick1.0';
+    public $sourcePath = __DIR__ . '/assets/quick1.1';
 
     public $js = [
         'custom.js'

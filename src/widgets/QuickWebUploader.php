@@ -71,6 +71,12 @@ class QuickWebUploader extends BaseWebUploader
         'F_EXCEED_SIZE' => '超出单个文件大小的限制',
         'Q_TYPE_DENIED' => '上传文件类型不符',
     ];
+    /**
+     * 单行文本最大长度，超过该长度后中间会以省略号显示
+     * 小于0时表示不限制
+     * @var int
+     */
+    public $maxTextLength = 62;
 
     /**
      * @var string
@@ -126,6 +132,7 @@ class QuickWebUploader extends BaseWebUploader
             'deleteUrl' => Url::to($this->deleteUrl),
             'realDelete' => (int)$this->realDelete,
             'messageMap' => $this->messageMap,
+            'maxTextLength' => $this->maxTextLength,
         ]);
         $pluginOptions = Json::htmlEncode($this->getPluginOptions());
         $pluginEvents = Json::htmlEncode($this->getPluginEvents());
@@ -210,7 +217,7 @@ HTML;
             if (strpos($this->imageExt, $ext) !== false) {
                 $content = Html::img($filename);
             } else {
-                $content = Html::tag('span', $filename, ['class' => 'text']);
+                $content = Html::tag('span', $this->cutMaxTextLength($filename), ['class' => 'text']);
             }
             $options = $listItemOption;
             $options['data-url'] = $filename;
@@ -234,5 +241,14 @@ HTML;
         }
         $html[] = Html::endTag('div');
         return implode("\n", $html);
+    }
+
+    protected function cutMaxTextLength($str)
+    {
+        if ($this->maxTextLength > 0 && mb_strlen($str) > $this->maxTextLength) {
+            $startPos = intval($this->maxTextLength / 2) - 3;
+            return mb_substr($str, 0, $startPos) . '......' . mb_substr($str, -$startPos);
+        }
+        return $str;
     }
 }
